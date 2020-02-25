@@ -9,10 +9,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: cargo generate-lockfile
     - name: Cache
       uses: actions/cache@v1
       with:
-        path: target
+        path: target 
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
     - name: Build
       run: cargo build --verbose
