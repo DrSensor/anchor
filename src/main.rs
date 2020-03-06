@@ -1,16 +1,16 @@
 mod parser;
 
 use std::{
+    env::args,
     fs::File,
-    io::{self, stdin, BufRead, BufReader},
+    io::{self, BufRead, BufReader},
 };
 
 use parser::AnchorMarkdown;
 
 fn main() {
-    // let args = enddv::args().collect();
-    // TODO: check args[1] if empty then open ./Dockerfile
-    let dockerfile = File::open("./Dockerfile").expect("exists!");
+    let file = args().nth(1).unwrap_or("./Dockerfile".to_string());
+    let dockerfile = File::open(file).expect("dockerfile must exists!");
     let reader = BufReader::new(dockerfile);
 
     for line in reader.lines() {
@@ -34,7 +34,7 @@ fn main() {
     }
 }
 
-fn transform<O: io::Write + Default>(filepath: &str, cmd: &str) -> io::Result<AnchorMarkdown<O>> {
+fn transform<O: io::Write + Default>(filepath: &str, _cmd: &str) -> io::Result<AnchorMarkdown<O>> {
     let packages_md = File::open(filepath).expect("exists!");
     let reader = BufReader::new(packages_md);
     AnchorMarkdown::parse_ext(reader, "yay -S")
